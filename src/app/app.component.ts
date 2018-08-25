@@ -32,6 +32,12 @@ export class MyApp {
     // create a new delegate and register it with the native layer
     let delegate = this.ibeacon.Delegate();
     
+    // Subscribe to some of the delegate's event handlers
+    delegate.didRangeBeaconsInRegion().subscribe(
+      (pluginResult: IBeaconPluginResult) => console.log('didRangeBeaconsInRegion: ', pluginResult),
+      (error: any) => console.error(`Failure during ranging: `, error)
+    );
+    
     delegate.didStartMonitoringForRegion().subscribe(
       (pluginResult: IBeaconPluginResult) => console.log('didStartMonitoringForRegion: ', pluginResult),
       (error: any) => console.error(`Failure during starting of monitoring: `, error)
@@ -64,7 +70,7 @@ export class MyApp {
     );
 
     console.log('Creating BeaconRegion with UUID of: ', this.uuid);
-    const beaconRegion = this.ibeacon.BeaconRegion('nullBeaconRegion', this.uuid, 0, 0);
+    const beaconRegion = this.ibeacon.BeaconRegion('nullBeaconRegion', this.uuid, 0, 0, true)
 
     this.ibeacon.startMonitoringForRegion(beaconRegion).then(
       () => console.log('Native layer recieved the request to monitoring'),
